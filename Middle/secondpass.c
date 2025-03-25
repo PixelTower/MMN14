@@ -7,11 +7,11 @@
 extern int DC;
 extern int IC;
 
-// פונקציה לביצוע המעבר השני - המרת תוויות לכתובות ובדיקת תקינות
+/* Function to perform second pass - converting labels to addresses and validation */
 void second_pass(FILE *input, FILE *output)
 {
     char line[256];
-    rewind(input); // מחזיר את קובץ הקלט להתחלה
+    rewind(input); /* Reset input file to beginning */
 
     while (fgets(line, sizeof(line), input))
     {
@@ -25,5 +25,4 @@ void second_pass(FILE *input, FILE *output)
             return;
         }
     }
-
-    int num_tokens = sscanf(line, "%31s %127[^\"]", instruction, operand);
+}

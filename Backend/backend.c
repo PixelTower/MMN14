@@ -3,12 +3,12 @@
 #include <string.h>
 #include "backend.h"
 
-/*Structure to store labels and their addresses*/
+/* Structure to store labels and their addresses */
 Label label_table[MAX_LABEL];
-int label_count = 0;  /*Number of labels stored*/
-int next_address = 0; /*Tracks the next available memory address*/
+int label_count = 0;  /* Number of labels stored */
+int next_address = 0; /* Tracks the next available memory address */
 
-/*Adds a label to the table if it's valid and unique*/
+/* Adds a label to the table if it's valid and unique */
 void register_label(const char *line)
 {
     char *delimiter = strrchr(line, ':');
@@ -44,7 +44,7 @@ void register_label(const char *line)
     next_address += 4;
 }
 
-/*Retrieves the memory address of a specific label*/
+/* Retrieves the memory address of a specific label */
 int find_label_address(const char *label)
 {
     for (int i = 0; i < label_count; i++)

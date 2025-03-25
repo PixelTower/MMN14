@@ -4,82 +4,80 @@
 #include <ctype.h>
 #include "firstpass.h"
 
-int IC = 0; // Instruction Counter
-int DC = 0; // Data Counter
+int IC = 0; /* Instruction Counter */
+int DC = 0; /* Data Counter */
 
-// פונקציה לבדיקת תקינות שם תווית
+/* Function to check label name validity */
 int is_valid_label(const char *label)
 {
     int i = 0;
     if (!isalpha(label[0]))
-        return 0; // שם תווית חייב להתחיל באות
+        return 0; /* Label must start with a letter */
     for (i = 1; label[i] != '\0'; i++)
     {
         if (!isalnum(label[i]))
-            return 0; // תווית יכולה להכיל רק אותיות וספרות
+            return 0; /* Label can only contain letters and numbers */
     }
     return 1;
 }
 
-// פונקציה לקביעת גודל משתנה .data או .string
+/* Function to determine the size of .data or .string variable */
 int calculate_data_size(const char *line)
 {
     if (strncmp(line, ".string", 7) == 0)
     {
         char *start = strchr(line, '\"');
         if (!start)
-            return 0; // אין גרשיים בכלל
+            return 0; /* No opening quote found */
 
         char *end = strchr(start + 1, '\"');
         if (!end)
-            return 0; // אין גרש סוגר
+            return 0; /* No closing quote found */
 
-        return (end - start - 1) + 1; // אורך המחרוזת + תו סיום
+        return (end - start - 1) + 1; /* String length + null terminator */
     }
-    return 4;
-    למה דווקא 4 ? ? // עבור .data נניח שכל משתנה תופס 4 בייט
+    return 4; /* For .data we assume each variable takes 4 bytes */
 }
 
-// פונקציה לחישוב גודל פקודה
+/* Function to calculate instruction size */
 int get_instruction_size(const char *line)
 {
-    return 4;
-    למה 4 ? ? // נניח שכל פקודה רגילה תופסת 4 בייט
+    return 4; /* Assume each regular instruction takes 4 bytes */
 }
 
-// פונקציה לביצוע המעבר הראשון - איסוף תוויות וקביעת כתובות
+/* Function to perform the first pass - collecting labels and setting addresses */
 void first_pass(FILE *input)
 {
     char line[256];
-    rewind(input); // מחזיר את קובץ הקלט להתחלה
+    rewind(input); /* Reset input file to beginning */
 
     while (fgets(line, sizeof(line), input))
     {
-        // מסירים תו ירידת שורה
+        /* Remove newline character */
         size_t len = strlen(line);
         if (len > 0 && line[len - 1] == '\n')
         {
             line[len - 1] = '\0';
         }
 
-        // דילוג על שורות ריקות או הערות
+        /* Skip empty lines or comments */
         if (line[0] == '\0' || line[0] == ';')
         {
             continue;
         }
 
-        // הסרת רווחים מתחילת השורה
+        /* Remove leading whitespace */
         char *trimmed_line = line;
         while (*trimmed_line && isspace(*trimmed_line))
         {
             trimmed_line++;
         }
 
-        // זיהוי ושמירת תוויות
+        /* Identify and store labels */
         char *colon = strchr(trimmed_line, ':');
         if (colon)
         {
-            *colon = '\0'; // מסיר את הנקודתיים
+            *colon = '\0'; /* Remove the colon */
 
             if (!is_valid_label(trimmed_line))
             {
@@ -87,9 +85,9 @@ void first_pass(FILE *input)
                 continue;
             }
 
-            register_label(trimmed_line, IC); // רושם תווית עם הכתובת הנוכחית של IC
+            register_label(trimmed_line, IC); /* Register label with current IC address */
 
-            // בדיקה אם יש הוראה אחרי התווית
+            /* Check if there's an instruction after the label */
             char *instruction_part = colon + 1;
             while (*instruction_part && isspace(*instruction_part))
             {
@@ -103,14 +101,14 @@ void first_pass(FILE *input)
         }
         else
         {
-            // אם זה משתנה (הנחיית .data או .string), יש לעדכן את DC
+            /* If it's a variable (.data or .string directive), update DC */
             if (strncmp(trimmed_line, ".data", 5) == 0 || strncmp(trimmed_line, ".string", 7) == 0)
             {
                 DC += calculate_data_size(trimmed_line);
             }
             else
             {
-                // זיהוי פקודות והגדלת IC בהתאם לגודל הפקודה
+                /* Identify instructions and increase IC according to instruction size */
                 IC += get_instruction_size(trimmed_line);
             }
         }
