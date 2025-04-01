@@ -1,24 +1,30 @@
 CC = gcc
-CFLAGS = -ansi -Wall -pedantic
-OBJS = front.o prepro.o firstpass.o secondpass.o backend.o \
-       data_strct.o handle_text.o util.o Errors.o lexer.o \
-       code_conversion.o table.o assembler.o
-
+CFLAGS = -ansi -Wall -pedantic -Icommon -IFront -IBackend -IMiddle -IPrepro
 EXEC = assembler
+
+SRC = \
+    Front/front.c \
+    Prepro/prepro.c \
+    Middle/firstpass.c \
+    Middle/secondpass.c \
+    Backend/backend.c \
+    common/handle_text.c \
+    common/util.c \
+    common/Errors.c \
+    common/lexer.c \
+    common/code_conversion.c \
+    common/table.c
+
+OBJS = $(SRC:.c=.o)
 
 $(EXEC): $(OBJS)
 	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
 
-# Compile each .c file into .o
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean build files
 clean:
-	rm -f *.o $(EXEC)
+	rm -f $(OBJS) $(EXEC)
 
-# Clean all generated output files
 clean_outputs:
-	rm -f *.am *.ob *.ent *.ext *.t01
-  
- 
+	rm -f *.ob *.ent *.ext *.am *.t01

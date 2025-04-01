@@ -27,4 +27,6 @@ unsigned short command_to_short(command_parts *command);
 unsigned short reg_to_short(command_parts *command, int reg_src);
 
 /* Adds a single line to the code array */
-int add
+int add;
+
+#endif 

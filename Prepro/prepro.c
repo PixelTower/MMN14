@@ -1,11 +1,13 @@
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
 #include "prepro.h"
 #include "util.h"
 #include "Errors.h"
 #include "data_strct.h"
 #include "handle_text.h"
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 
 /* Expands macros and creates .am file. Returns pointer to macro list */
 node *mcro_exec(const char *file_name) {

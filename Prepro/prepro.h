@@ -1,7 +1,7 @@
 #ifndef PREPRO_H
 #define PREPRO_H
 
-#include "data_strct.h" /* For node struct */
+#include "Data_strct.h"
 
 /* 
  * Reads a .as file, extracts macros (mcro ... endmcro),

@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <front.h>
-
+#include <ctype.h>
+#include "front.h"
 #include "prepro.h"
 #include "data_strct.h"
 #include "util.h"

@@ -2,7 +2,7 @@
 #define ERRORS_H
 
 #include <stdio.h>
-#include "globals.h"  // For 'location' struct
+#include "globals.h"  /* For 'location' struct */
 
 /**
  * Represents a single error with its code and associated message.
@@ -16,7 +16,7 @@ typedef struct Error {
  * Enum for all error codes in the assembler.
  */
 typedef enum ERROR_CODES {
-    // General & macro-related errors
+    /* General & macro-related errors*/
     ERROR_CODE_0 = 0,
     ERROR_CODE_1,
     ERROR_CODE_2,
@@ -36,7 +36,7 @@ typedef enum ERROR_CODES {
     ERROR_CODE_16,
     ERROR_CODE_17,
 
-    // Line-related errors
+    /* Line-related errors*/
     ERROR_CODE_30 = 30,
     ERROR_CODE_31,
     ERROR_CODE_32,
@@ -56,7 +56,7 @@ typedef enum ERROR_CODES {
     ERROR_CODE_46,
     ERROR_CODE_47,
 
-    // Instruction and data-related
+    /* Instruction and data-related*/
     ERROR_CODE_50 = 50,
     ERROR_CODE_51,
     ERROR_CODE_52,
