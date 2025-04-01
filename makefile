@@ -1,25 +1,24 @@
 CC = gcc
-CFLAGS = -Wall -ansi -pedantic
+CFLAGS = -ansi -Wall -pedantic
+OBJS = front.o prepro.o firstpass.o secondpass.o backend.o \
+       data_strct.o handle_text.o util.o Errors.o lexer.o \
+       code_conversion.o table.o assembler.o
 
-OBJS = front.o prepro.o firstpass.o secondpass.o
+EXEC = assembler
 
-assembler: $(OBJS)
-	$(CC) $(CFLAGS) -o assembler $(OBJS)
+$(EXEC): $(OBJS)
+	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
 
-front.o: front.c front.h prepro.h firstpass.h secondpass.h
-	$(CC) $(CFLAGS) -c front.c
+# Compile each .c file into .o
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-prepro.o: prepro.c prepro.h
-	$(CC) $(CFLAGS) -c prepro.c
-
-firstpass.o: firstpass.c firstpass.h
-	$(CC) $(CFLAGS) -c firstpass.c
-
-secondpass.o: secondpass.c secondpass.h
-	$(CC) $(CFLAGS) -c secondpass.c
-
+# Clean build files
 clean:
-	rm -f *.o assembler
+	rm -f *.o $(EXEC)
 
-# End of makefile
-# This Makefile is used to compile the assembler program.
+# Clean all generated output files
+clean_outputs:
+	rm -f *.am *.ob *.ent *.ext *.t01
+  
+ 

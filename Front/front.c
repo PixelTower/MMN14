@@ -1,215 +1,188 @@
-/* filepath: /Users/ohadrahum/Documents/GettingStarted/MMN14/Front/front.c */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "preproc.h"
-#include "first_pass.h"
-#include "second_pass.h"
+#include <front.h>
 
+#include "prepro.h"
+#include "data_strct.h"
+#include "util.h"
+#include "Errors.h"
+#include "handle_text.h"
+#include "firstpass.h"
+#include "secondpass.h"
+#include "backend.h"
+#include "globals.h"
+#include "lexer.h"
 
-#define MAX_LINE_LENGTH 256
-#define MAX_LABEL_LENGTH 31
-#define MAX_OPCODE_LENGTH 10
-#define MAX_OPERAND_LENGTH 128
+/* AST helpers (נשאר בדיוק כמו שהיה בפרויקט שלך) */
+void build_ast_from_file(node *head);
+void print_macro_tree(node *ast);
+void free_macro_list(node *head);
+void free_instruction_ast();
 
-// Structure representing a single line of assembly in AST form
-typedef struct ASTNode {
-    char label[MAX_LABEL_LENGTH];
-    char opcode[MAX_OPCODE_LENGTH];
-    char operand1[MAX_OPERAND_LENGTH];
-    char operand2[MAX_OPERAND_LENGTH];
-    int line_number;
-    struct ASTNode *next;
-} ASTNode;
+/* AST root pointer from your AST module */
+extern ASTNode *inst_ast;
 
-// Parse a line of assembly into an ASTNode
-ASTNode *create_ast_node(const char *line, int line_number) {
-    ASTNode *node;
-    char temp[MAX_LINE_LENGTH], *token;
-    int token_count = 0;
+/* Debug toggle */
+#define DEBUG_MODE 1
 
-    printf("[DEBUG] Creating AST node from line %d: %s", line_number, line);
+/* Function declarations */
+int count_ast_instructions(ASTNode *head);
+int count_macros(node *head);
 
-    node = (ASTNode *)malloc(sizeof(ASTNode));
-    if (!node) {
-        printf("[ERROR] Memory allocation failed for ASTNode at line %d\n", line_number);
-        return NULL;
-    }
-
-    // Initialize all fields
-    node->label[0] = '\0';
-    node->opcode[0] = '\0';
-    node->operand1[0] = '\0';
-    node->operand2[0] = '\0';
-    node->line_number = line_number;
-    node->next = NULL;
-
-    strncpy(temp, line, MAX_LINE_LENGTH - 1);
-    temp[MAX_LINE_LENGTH - 1] = '\0';
-    token = strtok(temp, " \t,");
-
-    // Parse up to four tokens: label (if exists), opcode, operand1, operand2
-    while (token && token_count < 4) {
-        if (token_count == 0 && strchr(token, ':')) {
-            strncpy(node->label, token, MAX_LABEL_LENGTH - 1);
-            node->label[MAX_LABEL_LENGTH - 1] = '\0';
-            size_t len = strlen(node->label);
-            if (len > 0 && node->label[len - 1] == ':') {
-                node->label[len - 1] = '\0';
-            }
-        } else if (node->opcode[0] == '\0') {
-            strncpy(node->opcode, token, MAX_OPCODE_LENGTH - 1);
-            node->opcode[MAX_OPCODE_LENGTH - 1] = '\0';
-        } else if (node->operand1[0] == '\0') {
-            strncpy(node->operand1, token, MAX_OPERAND_LENGTH - 1);
-            node->operand1[MAX_OPERAND_LENGTH - 1] = '\0';
-        } else {
-            strncpy(node->operand2, token, MAX_OPERAND_LENGTH - 1);
-            node->operand2[MAX_OPERAND_LENGTH - 1] = '\0';
-        }
-        token = strtok(NULL, " \t,");
-        token_count++;
-    }
-
-    return node;
-}
-
-// Build the full AST from a file line by line
-ASTNode *build_ast_from_file(const char *file_name) {
-    FILE *fp;
-    char line[MAX_LINE_LENGTH];
-    int line_num = 0;
-    ASTNode *head = NULL, *tail = NULL;
-
-    printf("[DEBUG] Opening file for AST build: %s\n", file_name);
-    fp = fopen(file_name, "r");
-    if (!fp) {
-        printf("[ERROR] Failed to open file: %s\n", file_name);
-        return NULL;
-    }
-
-    while (fgets(line, sizeof(line), fp)) {
-        ASTNode *node;
-        line_num++;
-
-        // Skip empty lines and comments
-        if (line[0] == ';' || line[0] == '\n') continue;
-
-        node = create_ast_node(line, line_num);
-        if (!node) continue;
-
-        // Append node to linked list
-        if (!head) {
-            head = tail = node;
-        } else {
-            tail->next = node;
-            tail = node;
-        }
-    }
-
-    fclose(fp);
-    return head;
-}
-
-// Print the macro definitions tree
-void print_macro_tree(node *head) {
-    printf("[DEBUG] Printing macro tree\n");
-    while (head != NULL) {
-        printf("Macro: %s (defined at line %d)\n", head->name, head->line);
-        head = head->next;
-    }
-}
-
-// Print the parsed instructions from the AST
-void print_instruction_ast(ASTNode *head) {
-    printf("\n--- Instruction AST (Filtered) ---\n");
-    while (head) {
-        if (what_opcode(head->opcode) >= 0 || is_instr(head->opcode)) {
-            printf("Line %d:\n", head->line_number);
-            if (head->label[0]) printf("  Label: %s\n", head->label);
-            printf("  Opcode: %s\n", head->opcode);
-            if (head->operand1[0]) printf("  Operand1: %s\n", head->operand1);
-            if (head->operand2[0]) printf("  Operand2: %s\n", head->operand2);
-        }
-        head = head->next;
-    }
-    printf("----------------------------------\n");
-}
-
-// Free memory allocated to AST
-void free_instruction_ast(ASTNode *head) {
-    ASTNode *tmp;
-    printf("[DEBUG] Freeing instruction AST\n");
-    while (head) {
-        tmp = head;
-        head = head->next;
-        free(tmp);
-    }
-}
-
-// Main program logic
 int main(int argc, char *argv[]) {
-    char *as_file = NULL, *am_file = NULL;
-    node *ast = NULL;
-    ASTNode *inst_ast = NULL;
     int i;
+    int success_counter = 0;
+    int total_errors = 0;
+    int total_macros = 0;
+    int total_instructions = 0;
 
     if (argc < 2) {
-        fprintf(stderr, "Usage: %s <file1> <file2> ...\n", argv[0]);
-        return 1;
+        print_internal_error(ERROR_CODE_2);
+        return EXIT_FAILURE;
     }
+
+    printf("\nAssembler started for %d file(s)\n\n", argc - 1);
 
     for (i = 1; i < argc; i++) {
-        printf("[INFO] Processing file: %s\n", argv[i]);
+        char *file_name = argv[i];
+        char *as_file = NULL;
+        char *clean_file = NULL;
+        char *am_file = NULL;
 
-        // Create .as file name
-        as_file = add_new_file(argv[i], ".as");
-        if (!as_file) continue;
+        int label_lines = 0, extern_lines = 0, entries_lines = 0;
+        int has_error = 0;
+        int instruction_count = 0;
 
-        // Run macro preprocessor
-        printf("[INFO] Running preprocessor on: %s\n", as_file);
-        if (!mcro_exec(as_file, &ast)) {
-            printf("[ERROR] Preprocessor failed for: %s\n", as_file);
+        node *macro_list = NULL;
+        label_struct *label_table = NULL;
+
+        printf("===== Processing file: %s =====\n", file_name);
+
+        /* Step 1: build .as file name and clean it */
+        as_file = add_new_file(file_name, ".as");
+        clean_file = remove_extra_spaces_file(as_file);
+        if (!clean_file) {
+            printf("Error: cleaning failed for %s\n", as_file);
             free(as_file);
+            total_errors++;
             continue;
         }
 
-        // Create .am file name
-        am_file = add_new_file(argv[i], ".am");
+        /* Step 2: preprocess macros */
+        macro_list = mcro_exec(clean_file);
+        if (!macro_list) {
+            printf("Error: macro preprocessing failed\n");
+            free(as_file);
+            free(clean_file);
+            total_errors++;
+            continue;
+        }
+
+        /* Step 3: build AST and print */
+        build_ast_from_file(macro_list);
+        print_macro_tree(macro_list);
+
+        total_macros += count_macros(macro_list);
+        instruction_count = count_ast_instructions(inst_ast);
+        total_instructions += instruction_count;
+
+        if (DEBUG_MODE) {
+            printf("[DEBUG] Instructions in AST: %d\n", instruction_count);
+        }
+
+        /* Step 4: create .am file name */
+        am_file = add_new_file(file_name, ".am");
         if (!am_file) {
+            printf("Error: failed to create .am file\n");
+            free_macro_list(macro_list);
             free(as_file);
+            free(clean_file);
+            total_errors++;
             continue;
         }
 
-        // Run first pass
-        printf("[INFO] Running first pass on: %s\n", am_file);
-        if (exe_first_pass(am_file) != 0) {
-            printf("[ERROR] First pass failed for: %s\n", am_file);
+        /* Step 5: First Pass */
+        label_table = exe_first_pass(am_file, &label_lines, &has_error);
+        if (!label_table || has_error) {
+            printf("Error: first pass failed\n");
+            free_macro_list(macro_list);
             free(as_file);
+            free(clean_file);
             free(am_file);
+            total_errors++;
             continue;
         }
 
-        // Build and print instruction AST for debugging
-        inst_ast = build_ast_from_file(am_file);
-        if (inst_ast) {
-            print_instruction_ast(inst_ast);
-            free_instruction_ast(inst_ast);
+        if (DEBUG_MODE) {
+            printf("[DEBUG] First pass complete. Labels: %d\n", label_lines);
         }
 
-        // Run second pass
-        printf("[INFO] Running second pass on: %s\n", am_file);
-        if (exe_second_pass(am_file) != 0) {
-            fprintf(stderr, "Second pass failed for %s\n", am_file);
+        /* Step 6: Second Pass */
+        exe_second_pass(file_name, label_table, label_lines, &has_error, &extern_lines, &entries_lines);
+        if (has_error) {
+            printf("Error: second pass failed\n");
+            free_label_table(label_table, label_lines);
+            free_macro_list(macro_list);
+            free_instruction_ast();
+            free(as_file);
+            free(clean_file);
+            free(am_file);
+            total_errors++;
+            continue;
         }
 
+        /* Per-file summary */
+        printf("✅ %s processed successfully.\n", file_name);
+        printf("- Instructions: %d\n", instruction_count);
+        printf("- Macros: %d\n", count_macros(macro_list));
+        if (extern_lines > 0) printf("- Externs: %d\n", extern_lines);
+        if (entries_lines > 0) printf("- Entries: %d\n", entries_lines);
+        printf("- Output: %s.ob", file_name);
+        if (extern_lines > 0) printf(", %s.ext", file_name);
+        if (entries_lines > 0) printf(", %s.ent", file_name);
+        printf("\n\n");
+
+        /* Cleanup */
+        free_label_table(label_table, label_lines);
+        free_macro_list(macro_list);
+        free_instruction_ast();
         free(as_file);
+        free(clean_file);
         free(am_file);
+
+        success_counter++;
     }
 
-    // Print and free macro AST
-    print_macro_tree(ast);
-    free_macro_list(ast);
+    /* Global summary */
+    printf("===== Assembly Finished =====\n");
+    printf("Files assembled: %d\n", success_counter);
+    printf("Errors found: %d\n", total_errors);
+    printf("Total macros: %d\n", total_macros);
+    printf("Total instructions: %d\n", total_instructions);
+    printf("=============================\n");
 
     return 0;
+}
+
+/* Count the number of instructions in the AST */
+int count_ast_instructions(ASTNode *head) {
+    int count = 0;
+    while (head != NULL) {
+        if (what_opcode(head->opcode) >= 0 || is_instr(head->opcode)) {
+            count++;
+        }
+        head = head->next;
+    }
+    return count;
+}
+
+/* Count number of macros in macro list */
+int count_macros(node *head) {
+    int count = 0;
+    while (head != NULL) {
+        count++;
+        head = head->next;
+    }
+    return count;
 }
