@@ -1,25 +1,30 @@
 CC = gcc
-CFLAGS = -Wall -ansi -pedantic
+CFLAGS = -ansi -Wall -pedantic -Icommon -IFront -IBackend -IMiddle -IPrepro
+EXEC = assembler
 
-OBJS = front.o prepro.o firstpass.o secondpass.o
+SRC = \
+    Front/front.c \
+    Prepro/prepro.c \
+    Middle/firstpass.c \
+    Middle/secondpass.c \
+    Backend/backend.c \
+    common/handle_text.c \
+    common/util.c \
+    common/Errors.c \
+    common/lexer.c \
+    common/code_conversion.c \
+    common/table.c
 
-assembler: $(OBJS)
-	$(CC) $(CFLAGS) -o assembler $(OBJS)
+OBJS = $(SRC:.c=.o)
 
-front.o: front.c front.h prepro.h firstpass.h secondpass.h
-	$(CC) $(CFLAGS) -c front.c
+$(EXEC): $(OBJS)
+	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
 
-prepro.o: prepro.c prepro.h
-	$(CC) $(CFLAGS) -c prepro.c
-
-firstpass.o: firstpass.c firstpass.h
-	$(CC) $(CFLAGS) -c firstpass.c
-
-secondpass.o: secondpass.c secondpass.h
-	$(CC) $(CFLAGS) -c secondpass.c
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f *.o assembler
+	rm -f $(OBJS) $(EXEC)
 
-# End of makefile
-# This Makefile is used to compile the assembler program.
+clean_outputs:
+	rm -f *.ob *.ent *.ext *.am *.t01

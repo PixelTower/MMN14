@@ -1,6 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ifndef PREPRO_H
+#define PREPRO_H
 
-/* Function prototype for file preprocessing */
-void process_assembly_file(const char *filename);
+#include "Data_strct.h"
+
+/* 
+ * Reads a .as file, extracts macros (mcro ... endmcro),
+ * stores them in a linked list,
+ * replaces macro calls with their body,
+ * and writes the output to a new .am file.
+ * Returns the macro list (can be used later for printing or freeing).
+ */
+node *mcro_exec(const char *file_name);
+
+#endif
