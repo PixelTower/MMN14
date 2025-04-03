@@ -2,11 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
-#include "table.h"
 #include "util.h"
-#include "Errors.h" // header file where the error types and function declarations reside
+#include "Errors.h" 
 
-// Define an array of error structures with code and message
+/* Define an array of error structures with code and message*/
 Error errors[] = {
     {ERROR_CODE_0,  "No Error"},
     {ERROR_CODE_1,  "Failed to dynamically allocate memory"},
@@ -44,10 +43,10 @@ Error errors[] = {
     {ERROR_CODE_45, "Missing ':' after label declaration"},
     {ERROR_CODE_46, "Illegal register name. Use only @r1-@r7"},
     {ERROR_CODE_47, "Illegal comma before opcode"},
-    {-1, ""} // Sentinel to mark end of array
+    {-1, ""} 
 };
 
-// Prints internal error message based on the given error code
+/* Prints internal error message based on the given error code*/
 void print_internal_error(int code) {
     int i;
     for (i = 0; errors[i].error_id != -1; i++) {
@@ -59,7 +58,7 @@ void print_internal_error(int code) {
     fprintf(stderr, "[INTERNAL ERROR %d] Unknown error.\n", code);
 }
 
-// Prints external error message including the file and line number where it occurred
+/* Prints external error message including the file and line number where it occurred*/
 void print_external_error(int code, location loc) {
     int i;
     for (i = 0; errors[i].error_id != -1; i++) {
@@ -71,7 +70,7 @@ void print_external_error(int code, location loc) {
     printf("%s:%d: error: Unknown error (%d)\n", loc.file_name, loc.line_num, code);
 }
 
-// Utility function to close multiple files or free multiple pointers on fatal errors
+/* Utility function to close multiple files or free multiple pointers on fatal errors*/
 void abrupt_close(int arg_count, const char *type, ...) {
     int i;
     va_list args;

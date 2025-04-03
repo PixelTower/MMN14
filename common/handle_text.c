@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-#include "preproc.h"
+#include "prepro.h"
 #include "util.h"
 #include "globals.h"
 #include "handle_text.h"
@@ -22,13 +22,13 @@ char *remove_extra_spaces_file(char file_name[]) {
 
     new_file_name = add_new_file(file_name, ".t01");
     if (new_file_name == NULL) {
-        abrupt_close(1, "file", fp);
+        abrupt_close(fp);
         return NULL;
     }
 
     fp_temp = fopen(new_file_name, "w");
     if (fp_temp == NULL) {
-        abrupt_close(1, "file", fp);
+        abrupt_close(fp);
         print_internal_error(ERROR_CODE_7);
         return NULL;
     }

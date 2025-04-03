@@ -2,7 +2,7 @@
 #define GLOBALS_H
 
 /* Constant: maximum line length allowed */
-#define MAX_LINE_LENGTH 80
+#define MAX_LINE_LENGTH 81
 
 /* Constant: maximum length of a label */
 #define MAX_LABEL_LENGTH 31
@@ -40,8 +40,8 @@
 
 /* Struct for representing a file location: line number + file name */
 typedef struct location {
-    int line_num;         /* Line number in the file */
-    char *file_name;      /* File name */
-} location;
+    int line_num;         
+    char *file_name;    
+}file_location;
 
 #endif

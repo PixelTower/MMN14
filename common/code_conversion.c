@@ -4,7 +4,6 @@
 #include "code_conversion.h"
 #include "Errors.h"
 #include "globals.h"
-#include "table.h"
 #include "util.h"
 #include "lexer.h"
 

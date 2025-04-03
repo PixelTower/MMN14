@@ -1,7 +1,7 @@
 #ifndef FIRSTPASS_H
 #define FIRSTPASS_H
 
-/* Include necessary headers*/
+
 #include <stdio.h>
 
 /* Declare constants, if any*/
