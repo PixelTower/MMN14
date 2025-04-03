@@ -1,12 +1,19 @@
-#ifndef SECONDPASS_H
-#define SECONDPASS_H
+#ifndef SECOND_PASS_H
+#define SECOND_PASS_H
 
-/* Include necessary headers*/
 #include <stdio.h>
 
-/* Declare functions from secondpass.c*/
-void performSecondPass(const char *filename);
-int validateSecondPassData();
-void handleSecondPassError(const char *errorMessage);
+/*
+ * Performs the second pass of the assembler.
+ * This function traverses the instruction AST,
+ * resolves labels and outputs the final .ob file.
+ */
+void second_pass(FILE *output);
 
-#endif 
+/*
+ * Writes a single instruction with its resolved address
+ * to the output file, in base64 encoding format.
+ */
+void write_instruction(FILE *output, const char *opcode, int address);
+
+#endif

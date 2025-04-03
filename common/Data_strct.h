@@ -10,12 +10,9 @@ typedef struct ASTNode {
 /*  Macro Node structure  */
 typedef struct node {
     char *name;
-    char *content;      /* NEW: actual content line or full macro body */
-    char **lines;       /* Optional: if you store multiple lines */
-    int line_count;
+    char *content;
     struct node *next;
 } node;
-
 
 /*  Label structure for symbol table  */
 typedef struct label_struct {

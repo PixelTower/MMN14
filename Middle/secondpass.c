@@ -2,26 +2,37 @@
 #include <stdlib.h>
 #include <string.h>
 #include "secondpass.h"
+#include "backend.h"
+#include "data_strct.h"
+#include "util.h"
 
-extern int DC;
+extern ASTNode *inst_ast;
 extern int IC;
+extern int DC;
 
-/* Function to perform second pass - converting labels to addresses and validation */
-void second_pass(FILE *input, FILE *output)
+/* Helper function to write instruction to .ob file in base64 */
+void write_instruction(FILE *output, const char *opcode, int address)
 {
-    char line[256];
-    rewind(input); /* Reset input file to beginning */
+    char *encoded;
+    encoded = short_to_base64((unsigned short)address);
+    fprintf(output, "%s\t%s\n", opcode, encoded);
+    free(encoded);
+}
 
-    while (fgets(line, sizeof(line), input))
+/* Second pass: Resolve labels and write final instructions */
+void second_pass(FILE *output)
+{
+    ASTNode *curr = inst_ast;
+    int address = 100; /* Starting memory address */
+
+    while (curr != NULL)
     {
-        char *instruction = malloc(32 * sizeof(char));
-        char *operand = malloc(128 * sizeof(char));
-        if (!instruction || !operand)
+        if (curr->opcode != NULL)
         {
-            fprintf(stderr, "ERROR: Memory allocation failed\n");
-            free(instruction);
-            free(operand);
-            return;
+            /* Placeholder: real implementation would resolve operands too */
+            write_instruction(output, curr->opcode, address);
+            address += 1; /* Increment address for next instruction */
         }
+        curr = curr->next;
     }
 }
