@@ -2,59 +2,64 @@
 #include <stdlib.h>
 #include <string.h>
 #include "backend.h"
+#include "data_strct.h"
 
-/* Structure to store labels and their addresses */
-Label label_table[MAX_LABEL];
-int label_count = 0;  /* Number of labels stored */
-int next_address = 0; /* Tracks the next available memory address */
+#define MAX_LABELS 500
 
-/* Adds a label to the table if it's valid and unique */
-void register_label(const char *line)
+/* Symbol table */
+static label_struct label_table[MAX_LABELS];
+static int label_count = 0;
+
+/* Add label to symbol table */
+void register_label(const char *name, int address)
 {
-    char *delimiter = strrchr(line, ':');
-    if (!delimiter)
+    int i;
+    if (label_count >= MAX_LABELS)
     {
+        fprintf(stderr, "ERROR: Label table is full.\n");
         return;
     }
 
-    size_t name_length = delimiter - line;
-    if (name_length == 0 || name_length >= MAX_LABEL || label_count >= MAX_LABEL)
+    /* Check for duplicates */
+    for (i = 0; i < label_count; i++)
     {
-        fprintf(stderr, "ERROR: Invalid label or label table full\n");
-        return;
-    }
-
-    char label[MAX_LABEL];
-    strncpy(label, line, name_length);
-    label[name_length] = '\0';
-
-    for (int i = 0; i < label_count; i++)
-    {
-        if (strcmp(label_table[i].name, label) == 0)
+        if (strcmp(label_table[i].name, name) == 0)
         {
-            fprintf(stderr, "ERROR: Label already exists: %s\n", label);
+            fprintf(stderr, "ERROR: Duplicate label '%s'.\n", name);
             return;
         }
     }
 
-    strcpy(label_table[label_count].name, label);
-    label_table[label_count].address = next_address;
-
+    strcpy(label_table[label_count].name, name);
+    label_table[label_count].address = address;
+    label_table[label_count].type = 0; /* 0 = code label */
     label_count++;
-    next_address += 4;
 }
 
-/* Retrieves the memory address of a specific label */
-int find_label_address(const char *label)
+/* Return number of registered labels */
+int get_label_count(void)
 {
-    for (int i = 0; i < label_count; i++)
+    return label_count;
+}
+
+/* Free symbol table – in case of dynamic version (not needed here) */
+void free_label_table(label_struct *table, int count)
+{
+    /* No dynamic allocation used here, so nothing to free */
+}
+
+/* Find address of label in symbol table */
+int find_label_address(const char *name)
+{
+    int i;
+    for (i = 0; i < label_count; i++)
     {
-        if (strcmp(label_table[i].name, label) == 0)
+        if (strcmp(label_table[i].name, name) == 0)
         {
             return label_table[i].address;
         }
     }
 
-    fprintf(stderr, "ERROR: Label not found: %s\n", label);
+    fprintf(stderr, "ERROR: Label '%s' not found.\n", name);
     return -1;
 }

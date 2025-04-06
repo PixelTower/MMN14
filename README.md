@@ -1,29 +1,55 @@
 # MMN14 - Two-Pass Assembler
 
-This is an implementation of a two-pass assembler that processes assembly language code. The project is structured in multiple components:
+This project implements a **two-pass assembler** in ANSI C (C90) as part of the MMN14 course (System Programming, Semester 2025א).
 
-1. **Preprocessor (Prepro)**:
+The assembler is modular, divided into logical components:
 
-   - Handles macro expansions
-   - Cleans up input code
+---
 
-2. **Front End**:
+## Project Structure
 
-   - Initial processing of assembly code
-   - Empty implementation currently
+### 1. **Preprocessor (Prepro)**
+- Handles macro expansion (`mcro ... endmcro`)
+- Removes extra whitespace and cleans input
+- Generates a temporary `.am` file
 
-3. **Middle End**:
+### 2. **Front End**
+- Coordinates the full compilation process
+- Manages all phases and tracks errors
+- Builds and prints a macro AST (used for macro validation)
 
-   - First Pass: Collects labels and calculates addresses
-   - Second Pass: Converts labels to addresses
+### 3. **Middle End**
+- **First Pass**: 
+  - Scans for labels
+  - Calculates instruction/data addresses
+  - Validates opcodes and operands
+- **Second Pass**: 
+  - Resolves symbols
+  - Generates binary output (object + extern + entry files)
 
-4. **Back End**:
-   - Manages label table
-   - Handles symbol resolution
+### 4. **Back End**
+- Manages label and symbol tables
+- Handles .entry and .extern directives
+- Converts encoded lines into final base64 output
 
-The assembler works in two passes:
+---
 
-- First Pass: Scans for labels, calculates memory addresses
-- Second Pass: Resolves labels and generates final machine code
+## 🔁 Two-Pass Flow
 
-Currently tracking both instruction counter (IC) and data counter (DC) for memory allocation.
+1. **First Pass**:
+   - Builds symbol table
+   - Calculates memory offsets using IC/DC
+
+2. **Second Pass**:
+   - Fills in missing addresses
+   - Generates final `.ob`, `.ent`, `.ext` files
+
+Instruction counter (IC) and data counter (DC) are tracked separately for memory alignment.
+
+---
+
+## ⚙️ Build & Run
+
+```bash
+make
+./assembler example.as

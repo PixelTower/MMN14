@@ -1,17 +1,11 @@
-#ifndef LABEL_MANAGER_H
-#define LABEL_MANAGER_H
+#ifndef BACKEND_H
+#define BACKEND_H
 
-#define MAX_LABEL 50
+#include "data_strct.h"
 
-/* Structure to store labels and their addresses */
-typedef struct
-{
-    char name[MAX_LABEL];
-    int address;
-} Label;
+void register_label(const char *name, int address);
+int get_label_count(void);
+int find_label_address(const char *name);
+void free_label_table(label_struct *table, int count);
 
-/* Function declarations */
-void register_label(const char *line);
-int find_label_address(const char *label);
-
-#endif /* LABEL_MANAGER_H */
+#endif
