@@ -15,6 +15,8 @@
 #include "lexer.h"
 
 /* AST helpers (נשאר בדיוק כמו שהיה בפרויקט שלך) */
+/* These functions are related to Abstract Syntax Tree (AST) operations in the assembler program. Here
+is a brief explanation of each function: */
 void build_ast_from_file(node *head);
 void print_macro_tree(node *ast);
 void free_macro_list(node *head);
@@ -27,6 +29,8 @@ extern ASTNode *inst_ast;
 #define DEBUG_MODE 1
 
 /* Function declarations */
+/* The code snippet provided is the main function of an assembler program. Here is a brief overview of
+what the main function does: */
 int count_ast_instructions(ASTNode *head);
 int count_macros(node *head);
 
