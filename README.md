@@ -1,10 +1,7 @@
 # MMN14 - compile Assembler
-<<<<<<< HEAD
+
 The assembler is modular, divided into logical components:
 
----
-=======
->>>>>>> 99d8934 (21:03)
 
 ## Project Structure
 
