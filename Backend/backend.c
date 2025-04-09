@@ -43,7 +43,7 @@ int get_label_count(void)
 }
 
 /* Find address of label in symbol table */
-int find_label_address(const char *name)
+int find_label_address(const char *name) 
 {
     int i;
     for (i = 0; i < label_count; i++)
@@ -55,5 +55,6 @@ int find_label_address(const char *name)
     }
 
     fprintf(stderr, "ERROR: Label '%s' not found.\n", name);
-    return -1;
+       return -1;
 }
+
