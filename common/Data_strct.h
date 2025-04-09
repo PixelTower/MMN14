@@ -9,26 +9,21 @@ typedef struct ASTNode
 } ASTNode;
 
 /*  Macro Node structure  */
-typedef struct node
-{
+typedef struct node {
     char *name;
     char *content;
+    int line;
     struct node *next;
 } node;
 
 /*  Label structure for symbol table  */
-<<<<<<< HEAD
-typedef struct label_struct
-{
+typedef struct label_struct {
     char name[32]; /* Label name */
     int address;   /* Address of the label */
     int type;      /* 0 = code, 1 = data, 2 = external, etc. */
-=======
-typedef struct label_struct {
-    char name[32];  
-    int address;    
-    int type;       
->>>>>>> 99d8934 (21:03)
 } label_struct;
 
 #endif
+
+
+
