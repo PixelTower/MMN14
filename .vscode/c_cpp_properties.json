@@ -1,18 +1,21 @@
 {
-  "configurations": [
-    {
-      "name": "windows-gcc-x64",
-      "includePath": [
-        "${workspaceFolder}/**"
-      ],
-      "compilerPath": "gcc",
-      "cStandard": "${default}",
-      "cppStandard": "${default}",
-      "intelliSenseMode": "windows-gcc-x64",
-      "compilerArgs": [
-        ""
-      ]
-    }
-  ],
-  "version": 4
+    "configurations": [
+        {
+            "name": "windows-gcc-x64",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/common",
+                "/Users/ohadrahum/Documents/GettingStarted/MMN14/Backend",
+                "${workspaceFolder}/common"
+            ],
+            "compilerPath": "gcc",
+            "cStandard": "c89",
+            "cppStandard": "${default}",
+            "intelliSenseMode": "linux-gcc-x86",
+            "compilerArgs": [
+                ""
+            ]
+        }
+    ],
+    "version": 4
 }

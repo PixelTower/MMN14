@@ -43,7 +43,7 @@ node *mcro_exec(const char *file_name) {
         line_num++;
 
         /* Remove newline and extra spaces */
-        line[strcspn(line, "\n")] = '\0';
+        line[strcspn(line, "\n")] = " ";
         strcpy(clean_line, line);
         remove_extra_spaces_str(clean_line);
 

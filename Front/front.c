@@ -14,13 +14,13 @@
 #include "globals.h"
 #include "lexer.h"
 
-/* AST helpers (נשאר בדיוק כמו שהיה בפרויקט שלך) */
+/* AST helpers */
 /* These functions are related to Abstract Syntax Tree (AST) operations in the assembler program. Here
 is a brief explanation of each function: */
 void build_ast_from_file(node *head);
 void print_macro_tree(node *ast);
 void free_macro_list(node *head);
-void free_instruction_ast();
+void free_instruction_ast(void);
 
 /* AST root pointer from your AST module */
 extern ASTNode *inst_ast;
@@ -34,21 +34,24 @@ what the main function does: */
 int count_ast_instructions(ASTNode *head);
 int count_macros(node *head);
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     int i;
     int success_counter = 0;
     int total_errors = 0;
     int total_macros = 0;
     int total_instructions = 0;
 
-    if (argc < 2) {
+    if (argc < 2)
+    {
         print_internal_error(ERROR_CODE_2);
         return EXIT_FAILURE;
     }
 
     printf("\nAssembler started for %d file(s)\n\n", argc - 1);
 
-    for (i = 1; i < argc; i++) {
+    for (i = 1; i < argc; i++)
+    {
         char *file_name = argv[i];
         char *as_file = NULL;
         char *clean_file = NULL;
@@ -66,7 +69,8 @@ int main(int argc, char *argv[]) {
         /* Step 1: build .as file name and clean it */
         as_file = add_new_file(file_name, ".as");
         clean_file = remove_extra_spaces_file(as_file);
-        if (!clean_file) {
+        if (!clean_file)
+        {
             printf("Error: cleaning failed for %s\n", as_file);
             free(as_file);
             total_errors++;
@@ -74,8 +78,11 @@ int main(int argc, char *argv[]) {
         }
 
         /* Step 2: preprocess macros */
-        macro_list = mcro_exec(clean_file);
-        if (!macro_list) {
+        /* This code snippet is executing a macro preprocessing step on the contents of a cleaned file.
+        Here is a breakdown of what is happening: */
+        macro_list = macro_exec(clean_file);
+        if (!macro_list)
+        {
             printf("Error: macro preprocessing failed\n");
             free(as_file);
             free(clean_file);
@@ -91,13 +98,15 @@ int main(int argc, char *argv[]) {
         instruction_count = count_ast_instructions(inst_ast);
         total_instructions += instruction_count;
 
-        if (DEBUG_MODE) {
+        if (DEBUG_MODE)
+        {
             printf("[DEBUG] Instructions in AST: %d\n", instruction_count);
         }
 
         /* Step 4: create .am file name */
         am_file = add_new_file(file_name, ".am");
-        if (!am_file) {
+        if (!am_file)
+        {
             printf("Error: failed to create .am file\n");
             free_macro_list(macro_list);
             free(as_file);
@@ -108,7 +117,8 @@ int main(int argc, char *argv[]) {
 
         /* Step 5: First Pass */
         label_table = exe_first_pass(am_file, &label_lines, &has_error);
-        if (!label_table || has_error) {
+        if (!label_table || has_error)
+        {
             printf("Error: first pass failed\n");
             free_macro_list(macro_list);
             free(as_file);
@@ -118,13 +128,15 @@ int main(int argc, char *argv[]) {
             continue;
         }
 
-        if (DEBUG_MODE) {
+        if (DEBUG_MODE)
+        {
             printf("[DEBUG] First pass complete. Labels: %d\n", label_lines);
         }
 
         /* Step 6: Second Pass */
         exe_second_pass(file_name, label_table, label_lines, &has_error, &extern_lines, &entries_lines);
-        if (has_error) {
+        if (has_error)
+        {
             printf("Error: second pass failed\n");
             free_label_table(label_table, label_lines);
             free_macro_list(macro_list);
@@ -140,11 +152,15 @@ int main(int argc, char *argv[]) {
         printf("✅ %s processed successfully.\n", file_name);
         printf("- Instructions: %d\n", instruction_count);
         printf("- Macros: %d\n", count_macros(macro_list));
-        if (extern_lines > 0) printf("- Externs: %d\n", extern_lines);
-        if (entries_lines > 0) printf("- Entries: %d\n", entries_lines);
+        if (extern_lines > 0)
+            printf("- Externs: %d\n", extern_lines);
+        if (entries_lines > 0)
+            printf("- Entries: %d\n", entries_lines);
         printf("- Output: %s.ob", file_name);
-        if (extern_lines > 0) printf(", %s.ext", file_name);
-        if (entries_lines > 0) printf(", %s.ent", file_name);
+        if (extern_lines > 0)
+            printf(", %s.ext", file_name);
+        if (entries_lines > 0)
+            printf(", %s.ent", file_name);
         printf("\n\n");
 
         /* Cleanup */
@@ -170,10 +186,13 @@ int main(int argc, char *argv[]) {
 }
 
 /* Count the number of instructions in the AST */
-int count_ast_instructions(ASTNode *head) {
+int count_ast_instructions(ASTNode *head)
+{
     int count = 0;
-    while (head != NULL) {
-        if (what_opcode(head->opcode) >= 0 || is_instr(head->opcode)) {
+    while (head != NULL)
+    {
+        if (what_opcode(head->opcode) >= 0 || is_instr(head->opcode))
+        {
             count++;
         }
         head = head->next;
@@ -182,9 +201,11 @@ int count_ast_instructions(ASTNode *head) {
 }
 
 /* Count number of macros in macro list */
-int count_macros(node *head) {
+int count_macros(node *head)
+{
     int count = 0;
-    while (head != NULL) {
+    while (head != NULL)
+    {
         count++;
         head = head->next;
     }

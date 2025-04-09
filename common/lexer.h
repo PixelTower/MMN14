@@ -26,7 +26,7 @@ int legal_label_decl(char *str, int *error_code);
 int legal_label(char *str);
 
 /* Checks if there's extra unexpected text in the line */
-int extra_text();
+int extra_text(void);
 
 /* Checks if the string is a valid register or label */
 int is_reg_or_label(char *str);
@@ -38,7 +38,7 @@ int is_num(char *str);
 int is_reg_or_label_or_num(char *str);
 
 /* Counts how many times a character appears in a string */
-int count_occurr(char *str, char ch);
+int count_occur(char *str, char ch);
 
 /* Checks if the string contains any whitespace characters */
 int has_white_space(const char *str);
