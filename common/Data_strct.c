@@ -1,7 +1,7 @@
 #include "data_strct.h"
 
-/* Creates a new macro node with name, content, and line number */
-node *make_node(const char *name, const char *content, int line_num) {
+static node *make_node(const char *name, const char *content, int line_num) {
+    node *new_node = (node *)malloc(sizeof(node));
     node *new_node = (node *)malloc(sizeof(node));
     if (!new_node) {
         fprintf(stderr, "[ERROR] Failed to allocate memory for macro node.\n");
