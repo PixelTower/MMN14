@@ -59,7 +59,7 @@ void print_internal_error(int code) {
 }
 
 /* Prints external error message including the file and line number where it occurred*/
-void print_external_error(int code, location loc) {
+void print_external_error(int code, file_location loc) {
     int i;
     for (i = 0; errors[i].error_id != -1; i++) {
         if (errors[i].error_id == code) {
