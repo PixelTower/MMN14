@@ -14,7 +14,7 @@
 #include "globals.h"
 #include "lexer.h"
 
-/* AST helpers (נשאר בדיוק כמו שהיה בפרויקט שלך) */
+/* AST helpers */
 void build_ast_from_file(node *head);
 void print_macro_tree(node *ast);
 void free_macro_list(node *head);
