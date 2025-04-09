@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -10,7 +9,7 @@
 #include "handle_text.h"
 
 /* Expands macros and creates .am file. Returns pointer to macro list */
-node *mcro_exec(const char *file_name) {
+node *macro_exec(const char *file_name) {
     FILE *input_file, *output_file;
     char line[MAX_LINE_LENGTH + 2];
     char *am_file_name;
@@ -41,17 +40,17 @@ node *mcro_exec(const char *file_name) {
         char *token;
         char clean_line[MAX_LINE_LENGTH + 2];
         line_num++;
-
+        
         /* Remove newline and extra spaces */
-        line[strcspn(line, "\n")] = " ";
+        line[strcspn(line, "\n")] = ' ';
         strcpy(clean_line, line);
         remove_extra_spaces_str(clean_line);
 
         if (clean_line[0] == ';' || clean_line[0] == '\0') {
-            continue; 
+            continue;
         }
 
-        token = strtok(clean_line, " \t");
+       token = strtok(clean_line, " \t");
 
         /* Start macro definition */
         if (!inside_macro && token && strcmp(token, "mcro") == 0) {
@@ -73,13 +72,12 @@ node *mcro_exec(const char *file_name) {
             continue;
         }
 
-        /* Inside macro body – accumulate content */
-        if (inside_macro) {
-            strcat(macro_content, line);
-            strcat(macro_content, "\n");
+        /* End macro definition */
+        if (inside_macro && strcmp(clean_line, "mcroend") == 0) {
+            add_to_list(&macro_list, macro_name, macro_content, line_num);
+            inside_macro = 0;
             continue;
         }
-
         /* Outside macro – check if line is a macro call */
         if (token) {
             int found = 0;
