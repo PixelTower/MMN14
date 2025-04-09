@@ -133,5 +133,5 @@ void exe_second_pass(const char *filename, label_struct *table, int label_count,
     fclose(fp);
     free(ob_file);
 
-    /* Additional handling for extern and entry files can be added as needed */
+
 }
