@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "backend.h"
-#include "Data_strct.h"
+#include "data_strct.h"
 
 #define MAX_LABELS 500
 

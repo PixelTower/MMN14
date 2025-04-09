@@ -1,7 +1,7 @@
 #ifndef BACKEND_H
 #define BACKEND_H
 
-#include "Data_strct.h"
+#include "data_strct.h"
 
 void register_label(const char *name, int address);
 int get_label_count(void);
