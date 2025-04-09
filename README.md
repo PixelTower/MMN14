@@ -1,7 +1,4 @@
-# MMN14 - Two-Pass Assembler
-
-This project implements a **two-pass assembler** in ANSI C (C90) as part of the MMN14 course (System Programming, Semester 2025א).
-
+# MMN14 - compile Assembler
 The assembler is modular, divided into logical components:
 
 ---
