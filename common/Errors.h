@@ -7,14 +7,12 @@
 
 #include <stdio.h>
 
-<<<<<<< HEAD
 /* === Error location type === */
 typedef enum
 {
 =======
 /*  Error location type */
 typedef enum {
->>>>>>> 99d8934 (21:03)
     LOCATION_NONE,
     LOCATION_LINE,
     LOCATION_MACRO,
@@ -28,7 +26,6 @@ typedef struct
 =======
 /*  Error structure  */
 typedef struct {
->>>>>>> 99d8934 (21:03)
     int code;
     const char *message;
     location loc_type;
@@ -36,7 +33,6 @@ typedef struct {
 
 /*  Function declarations  */
 
-<<<<<<< HEAD
 /* Set the location type for where the error occurred. */
 void set_location(location loc);
 
@@ -51,21 +47,5 @@ void print_warning(const char *format, ...);
 
 /* Abruptly close execution and free resources. */
 void abrupt_close(FILE *fp);
-=======
-/*Set the location type for where the error occurred.*/
-void set_location(location loc);
 
-/*Print an internal error from the predefined list.*/
-void print_internal_error(int code);
-
-/* Print a custom error with format and arguments.*/
-void print_error(const char *format, ...);
-
-/* Print a warning (non-fatal).*/
-void print_warning(const char *format, ...);
-
-/*Abruptly close execution and free resources */
-void abrupt_close(fp);
->>>>>>> 99d8934 (21:03)
-
-#endif /*ERRORS_H*/
+#endif 
