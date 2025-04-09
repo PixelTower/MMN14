@@ -48,7 +48,7 @@ node *mcro_exec(const char *file_name) {
         remove_extra_spaces_str(clean_line);
 
         if (clean_line[0] == ';' || clean_line[0] == '\0') {
-            continue; /* Skip comment or empty line */
+            continue; 
         }
 
         token = strtok(clean_line, " \t");

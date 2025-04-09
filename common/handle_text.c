@@ -79,7 +79,7 @@ char *copy_text(FILE *fp, fpos_t *pos, int length) {
     }
     str[i] = '\0';
 
-    fgetpos(fp, pos); /* Save new position */
+    fgetpos(fp, pos); 
     return str;
 }
 

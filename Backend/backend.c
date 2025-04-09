@@ -32,7 +32,7 @@ void register_label(const char *name, int address)
 
     strcpy(label_table[label_count].name, name);
     label_table[label_count].address = address;
-    label_table[label_count].type = 0; /* 0 = code label */
+    label_table[label_count].type = 0; 
     label_count++;
 }
 

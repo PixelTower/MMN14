@@ -4,6 +4,7 @@
 #include "globals.h"
 
 /* Represents a single line of machine code */
+<<<<<<< HEAD
 typedef struct code_conv
 {
     unsigned short short_num; /* Binary value of the instruction */
@@ -17,6 +18,19 @@ typedef struct command_parts
     char *source; /* Source operand */
     char *dest;   /* Destination operand */
     int opcode;   /* Opcode index */
+=======
+typedef struct code_conv {
+    unsigned short short_num;  
+    int assembly_line;         
+    char *label;               
+} code_conv;
+
+/* Represents the parts of a command: source, destination, and opcode */
+typedef struct command_parts {
+    char *source;  
+    char *dest;    
+    int opcode;    
+>>>>>>> 99d8934 (21:03)
 } command_parts;
 
 /* Allocates or reallocates memory for code array */

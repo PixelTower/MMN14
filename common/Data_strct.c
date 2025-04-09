@@ -1,5 +1,3 @@
-/* data_strct.c - Implements linked list functions for macro storage */
-
 #include "data_strct.h"
 
 /* Creates a new macro node with name, content, and line number */

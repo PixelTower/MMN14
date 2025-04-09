@@ -9,11 +9,14 @@
 #define MAX_LABEL_LENGTH 31
 #define BIG_NUMBER_CONST 1000
 
+<<<<<<< HEAD
 /* Function declarations */
 
 /* Executes macro preprocessing on a cleaned file */
 node *macro_exec(const char *clean_file);
 
+=======
+>>>>>>> 99d8934 (21:03)
 /* Adds a macro to the list */
 void add_to_list(node **head, const char *name, const char *content, int line);
 

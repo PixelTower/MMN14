@@ -1,7 +1,10 @@
 # MMN14 - compile Assembler
+<<<<<<< HEAD
 The assembler is modular, divided into logical components:
 
 ---
+=======
+>>>>>>> 99d8934 (21:03)
 
 ## Project Structure
 
@@ -31,7 +34,7 @@ The assembler is modular, divided into logical components:
 
 ---
 
-## 🔁 Two-Pass Flow
+## Two-Pass Flow
 
 1. **First Pass**:
    - Builds symbol table
@@ -45,7 +48,7 @@ Instruction counter (IC) and data counter (DC) are tracked separately for memory
 
 ---
 
-## ⚙️ Build & Run
+## Build & Run
 
 ```bash
 make

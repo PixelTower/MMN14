@@ -5,8 +5,8 @@
 #include "firstpass.h"
 #include "backend.h"
 
-int IC = 0; /* Instruction Counter */
-int DC = 0; /* Data Counter */
+int IC = 0; 
+int DC = 0; 
 
 /* Function to check label name validity */
 int is_valid_label(const char *label)
@@ -41,13 +41,13 @@ int calculate_data_size(const char *line)
         return (end - start - 1) + 1;
     }
 
-    return 4; /* For .data assume 4 bytes per value */
+    return 4; 
 }
 
 /* Function to calculate instruction size */
 int get_instruction_size(const char *line)
 {
-    return 4; /* Placeholder for now */
+    return 4; 
 }
 
 /* First pass: collect labels and compute addresses */
