@@ -5,7 +5,7 @@
 #include "front.h"
 #include "prepro.h"
 #include "data_strct.h"
-#include "util.h"
+#include "Util.h"
 #include "Errors.h"
 #include "handle_text.h"
 #include "firstpass.h"

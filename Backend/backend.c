@@ -42,12 +42,6 @@ int get_label_count(void)
     return label_count;
 }
 
-/* Free symbol table – in case of dynamic version (not needed here) */
-void free_label_table(label_struct *table, int count)
-{
-    /* No dynamic allocation used here, so nothing to free */
-}
-
 /* Find address of label in symbol table */
 int find_label_address(const char *name)
 {

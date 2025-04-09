@@ -59,7 +59,8 @@
   "files.associations": {
     "data strct": "c",
     "stdio.h": "c",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "backend.h": "c"
   },
   "makefile.configureOnOpen": false
 }

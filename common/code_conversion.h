@@ -4,17 +4,19 @@
 #include "globals.h"
 
 /* Represents a single line of machine code */
-typedef struct code_conv {
-    unsigned short short_num;  /* Binary value of the instruction */
-    int assembly_line;         /* Line number in the .am file */
-    char *label;               /* Label attached to this line, if any */
+typedef struct code_conv
+{
+    unsigned short short_num; /* Binary value of the instruction */
+    int assembly_line;        /* Line number in the .am file */
+    char *label;              /* Label attached to this line, if any */
 } code_conv;
 
 /* Represents the parts of a command: source, destination, and opcode */
-typedef struct command_parts {
-    char *source;  /* Source operand */
-    char *dest;    /* Destination operand */
-    int opcode;    /* Opcode index */
+typedef struct command_parts
+{
+    char *source; /* Source operand */
+    char *dest;   /* Destination operand */
+    int opcode;   /* Opcode index */
 } command_parts;
 
 /* Allocates or reallocates memory for code array */
@@ -29,4 +31,4 @@ unsigned short reg_to_short(command_parts *command, int reg_src);
 /* Adds a single line to the code array */
 int add;
 
-#endif 
+#endif

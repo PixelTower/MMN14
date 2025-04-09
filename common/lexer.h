@@ -5,7 +5,8 @@
 #include "code_conversion.h"
 
 /* Struct for opcode name and argument count */
-typedef struct op_code {
+typedef struct op_code
+{
     char *opcode;
     int arg_num;
 } op_code;
