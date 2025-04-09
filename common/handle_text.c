@@ -20,32 +20,28 @@ char *remove_extra_spaces_file(char file_name[]) {
         return NULL;
     }
 
-    new_file_name = add_new_file(file_name, ".t01");
-    if (new_file_name == NULL) {
-        abrupt_close(fp);
-        return NULL;
-    }
+  if (new_file_name == NULL) {
+    abrupt_close(1, "file", fp);
+    return NULL;
+}
 
-    fp_temp = fopen(new_file_name, "w");
-    if (fp_temp == NULL) {
-        abrupt_close(fp);
-        print_internal_error(ERROR_CODE_7);
-        return NULL;
-    }
+fp_temp = fopen(new_file_name, "w");
+if (fp_temp == NULL) {
+    abrupt_close(1, "file", fp);
+    print_internal_error(ERROR_CODE_7);
+    return NULL;
+}
 
     line_num = 0;
-    while (fgets(str, 999, fp) != NULL) {
-        line_num++;
-
-        if (strlen(str) > MAX_LINE_LENGTH) {
-            location loc;
-            loc.file_name = file_name;
-            loc.line_num = line_num;
-            print_external_error(ERROR_CODE_30, loc);
-            fclose(fp);
-            fclose(fp_temp);
-            return NULL;
-        }
+    while (fgets(str, BIG_NUMBER_CONST, fp) != NULL) {
+    line_num++;
+    if (strlen(str) > MAX_LINE_LENGTH) {
+        file_location loc;
+        loc.file_name = file_name;
+        loc.line_num = line_num;
+        print_external_error(ERROR_CODE_30, loc);
+        /* Optionally set a flag or handle error */
+    }
 
         /* Replace comment lines with a newline */
         if (*str == ';') {
@@ -79,7 +75,7 @@ char *copy_text(FILE *fp, fpos_t *pos, int length) {
     }
     str[i] = '\0';
 
-    fgetpos(fp, pos); /* Save new position */
+    fgetpos(fp, pos); 
     return str;
 }
 

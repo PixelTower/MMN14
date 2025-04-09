@@ -9,8 +9,6 @@
 #define MAX_LABEL_LENGTH 31
 #define BIG_NUMBER_CONST 1000
 
-/* Function declarations */
-
 /* Executes macro preprocessing on a cleaned file */
 node *macro_exec(const char *clean_file);
 
@@ -19,9 +17,6 @@ void add_to_list(node **head, const char *name, const char *content, int line);
 
 /* Searches for a macro by name */
 node *search_list(node *head, const char *name, int *found);
-
-/* Preprocess a file: handles macro expansion */
-FILE *preprocess_file(const char *filename);
 
 /* Clears macro list from memory */
 void free_macro_list(node *head);

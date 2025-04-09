@@ -14,9 +14,7 @@ typedef struct
     int isExternal;
 } Symbol;
 
-/* Declare functions*/
-void firstPass(FILE *sourceFile);
-int processLine(const char *line, int lineNumber);
-int addSymbol(const char *label, int address, int isExternal);
+void first_pass(FILE *sourceFile);
+/* (Removed declarations of processLine and addSymbol – not used) */
 
 #endif

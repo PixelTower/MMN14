@@ -10,21 +10,28 @@
 /* === Error location type === */
 typedef enum
 {
+=======
+/*  Error location type */
+typedef enum {
     LOCATION_NONE,
     LOCATION_LINE,
     LOCATION_MACRO,
     LOCATION_MEMORY
 } location;
 
+<<<<<<< HEAD
 /* === Error structure === */
 typedef struct
 {
+=======
+/*  Error structure  */
+typedef struct {
     int code;
     const char *message;
     location loc_type;
 } Error;
 
-/* === Function declarations === */
+/*  Function declarations  */
 
 /* Set the location type for where the error occurred. */
 void set_location(location loc);
@@ -41,4 +48,4 @@ void print_warning(const char *format, ...);
 /* Abruptly close execution and free resources. */
 void abrupt_close(FILE *fp);
 
-#endif /*ERRORS_H*/
+#endif 

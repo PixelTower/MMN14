@@ -15,8 +15,6 @@
 #include "lexer.h"
 
 /* AST helpers */
-/* These functions are related to Abstract Syntax Tree (AST) operations in the assembler program. Here
-is a brief explanation of each function: */
 void build_ast_from_file(node *head);
 void print_macro_tree(node *ast);
 void free_macro_list(node *head);
@@ -149,7 +147,7 @@ int main(int argc, char *argv[])
         }
 
         /* Per-file summary */
-        printf("✅ %s processed successfully.\n", file_name);
+        printf(" %s processed successfully.\n", file_name);
         printf("- Instructions: %d\n", instruction_count);
         printf("- Macros: %d\n", count_macros(macro_list));
         if (extern_lines > 0)

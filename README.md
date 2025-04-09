@@ -2,7 +2,6 @@
 
 
 
----
 
 ## Project Structure
 
@@ -32,7 +31,7 @@
 
 ---
 
-## 🔁 Two-Pass Flow
+## Two-Pass Flow
 
 1. **First Pass**:
    - Builds symbol table
@@ -46,7 +45,7 @@ Instruction counter (IC) and data counter (DC) are tracked separately for memory
 
 ---
 
-## ⚙️ Build & Run
+## Build & Run
 
 ```bash
 make

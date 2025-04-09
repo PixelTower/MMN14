@@ -23,7 +23,7 @@ void write_instruction(FILE *output, const char *opcode, int address)
 void second_pass(FILE *output)
 {
     ASTNode *curr = inst_ast;
-    int address = 100; /* Starting memory address */
+    int address = 100; 
 
     while (curr != NULL)
     {
@@ -31,7 +31,7 @@ void second_pass(FILE *output)
         {
             /* Placeholder: real implementation would resolve operands too */
             write_instruction(output, curr->opcode, address);
-            address += 1; /* Increment address for next instruction */
+            address += 1; 
         }
         curr = curr->next;
     }
